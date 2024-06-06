@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logowanie</title>
+</head>
+<body>
+    <main>
+        <header></header>
+        <section id="login">
+            <input type="text" name="username" id="username">
+            <input type="password" name="pass" id="pass">
+            <input type="button" value="Login" id="sub">
+            <a href="#account">Create new account</a>
+        </section>
+        <section id="account">
+            <input type="text" name="username_new" id="username_new">
+            <input type="password" name="pass_acc" id="pass_acc">
+            <input type="password" name="con_pass" id="con_pass">
+            <input type="button" value="Create" id="sub_acc">
+        </section>
+        <section id="main"></section>
+        <footer></footer>
+    </main>
+    <script>
+        let cipher_increment = 12;
+        const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_./";
+        let alphabet_length = alphabet.length;
+
+        const accounts = [];
+        function NewAcc(name,pass){
+            this.name = name;
+            this.pass = pass;
+        };
+
+        function encrypt(pass){
+            let encrypted = pass.split("");
+            for(let i = 0; i < encrypted.length; i++){
+                encrypted[i] = alphabet[(alphabet.indexOf(encrypted[i]) + cipher_increment) % alphabet_length];
+            }
+            return encrypted.join("");
+        };
+
+        sub_acc.addEventListener("click",function(){
+            let username = document.getElementById("username_new").value;
+            let pass1 = document.getElementById("pass_acc").value;
+            let pass2 = document.getElementById("con_pass").value;
+            if(pass1 != pass2){
+                alert("Passwords are not the same!");
+                return;
+            }
+            else{
+                let encrypted_pass = encrypt(pass1);
+                let acc = new NewAcc(username,encrypted_pass);
+                accounts.push(acc);
+                console.log(accounts);
+            }
+        });
+
+        sub.addEventListener("click",function(){
+            let username = document.getElementById("username").value;
+            let pass = document.getElementById("pass").value;
+            let encrypted_pass = encrypt(pass);
+            for(let acc of accounts){
+                if(acc.name == username && acc.pass == encrypted_pass){
+                    alert("Logged in!");
+                    return;
+                }
+                else{
+                    alert("Wrong username or password!");
+                }
+            }
+        });
+    </script>
+</body>
+</html>
